@@ -1,0 +1,9 @@
+# Pokémon Async League — Backend (Docker)
+## Requisitos
+- Docker / Docker Compose
+## Arranque
+```bash
+docker compose up --build
+
+## test
+docker compose exec backend python manage.py test battles
