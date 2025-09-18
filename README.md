@@ -39,6 +39,11 @@ El servicio quedará disponible en http://localhost:8000 (según la configuraci�
 docker compose exec backend python manage.py migrate
 ```
 
+## Cargar data inicial
+```bash
+docker compose exec backend python manage.py loaddata battles/fixtures/initial_data.json
+```
+
 ## Ejecutar tests
 Para correr las pruebas de la aplicación (ejemplo: módulo battles):
 ```bash
