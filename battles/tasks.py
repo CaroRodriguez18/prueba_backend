@@ -6,6 +6,7 @@ from django.conf import settings
 from redis import Redis
 from .models import Battle
 from django.utils import timezone
+from django.db.models import F
 
 def _redis():
     return Redis.from_url(getattr(settings, "REDIS_URL", "redis://redis:6379/0"))
@@ -36,7 +37,7 @@ def _sep(width: int = 64) -> str:
 # -----------------------------------------------------
 
 @shared_task(name="battles.tasks.run_battle")
-def run_battle(battle_id: int):
+def run_battle(battle_id: int, source: str = "manual"):
     # Carga y “lock” para evitar concurrentes
     with transaction.atomic():
         battle = (Battle.objects
@@ -115,6 +116,7 @@ def run_battle(battle_id: int):
 
         # si el combate tiene cron, tras terminar vuelve a "SCHEDULED"
         new_status = Battle.Status.SCHEDULED if battle.scheduled_cron else Battle.Status.FINISHED
+        now = timezone.now()
 
         Battle.objects.filter(id=battle_id).update(
             status=new_status,
@@ -122,6 +124,8 @@ def run_battle(battle_id: int):
             log="\n".join(lines),
             state={"hp_a": max(hpA, 0), "hp_b": max(hpB, 0)},
             updated_at=timezone.now(),
+            run_count_total=F("run_count_total") + 1,
+            run_count_cron =F("run_count_cron")  + (1 if source == "cron" else 0),
         )
 
         _emit(battle_id, {
