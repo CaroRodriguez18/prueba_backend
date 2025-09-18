@@ -58,8 +58,8 @@ class BattleDetailSerializer(BattleBaseSerializer,
 # ---- WRITE: creación/edición (sin campos de solo lectura) ----
 
 class BattleWriteSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    
+    id = serializers.IntegerField(read_only=True) # para respuestas
+
     class Meta:
         model = Battle
         fields = [

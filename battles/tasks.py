@@ -106,7 +106,8 @@ def run_battle(battle_id: int):
 
             attacker_is_A = not attacker_is_A
             turn += 1
-            time.sleep(0.4)  # “animación”
+            tick_sleep = getattr(settings, "BATTLE_TICK_SLEEP", 0.4)
+            time.sleep(tick_sleep)
 
         winner = A if hpA > 0 else B
         lines.append(_sep())
