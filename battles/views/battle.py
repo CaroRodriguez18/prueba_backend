@@ -19,7 +19,6 @@ from ..tasks import run_battle
 def _upsert_periodic_task_for_battle(battle):
     from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
-    print('holaaa', battle)
     minute, hour, dom, month, dow = battle.scheduled_cron.split()
     schedule, _ = CrontabSchedule.objects.get_or_create(
         minute=minute, hour=hour, day_of_week=dow,
