@@ -58,9 +58,12 @@ class BattleDetailSerializer(BattleBaseSerializer,
 # ---- WRITE: creación/edición (sin campos de solo lectura) ----
 
 class BattleWriteSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    
     class Meta:
         model = Battle
         fields = [
+            "id",
             "pokemon_a", "pokemon_b", "scenario",
             "scheduled_cron",
         ]
