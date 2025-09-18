@@ -12,6 +12,7 @@ class Battle(models.Model):
 
 
     # Nota: usamos strings para evitar import circular entre módulos
+    name = models.CharField(max_length=100, unique=True, null=True, blank=True)
     pokemon_a = models.ForeignKey("Pokemon", on_delete=models.CASCADE, related_name="battles_as_a")
     pokemon_b = models.ForeignKey("Pokemon", on_delete=models.CASCADE, related_name="battles_as_b")
     scenario  = models.ForeignKey("Scenario", on_delete=models.PROTECT)
@@ -21,6 +22,9 @@ class Battle(models.Model):
     winner = models.ForeignKey("Pokemon", on_delete=models.SET_NULL, null=True, blank=True, related_name="wins")
     log    = models.TextField(blank=True, default="")
     state  = models.JSONField(default=dict, blank=True)  # hp_a / hp_b en vivo
+
+    run_count_total = models.PositiveIntegerField(default=0) # Manual y por cron
+    run_count_cron  = models.PositiveIntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

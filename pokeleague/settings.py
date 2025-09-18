@@ -97,5 +97,8 @@ CELERY_TIMEZONE = "America/Bogota"
 CELERY_ENABLE_UTC = False 
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 60 * 5
+# Habilitar integración con django-celery-beat desde .env
+USE_DJANGO_CELERY_BEAT = os.getenv("USE_DJANGO_CELERY_BEAT", "false") in ("1","true","True","yes","on")
 
-BATTLE_TICK_SLEEP = 0.0 if DEBUG else 1.  # o controlar con TESTING
+
+BATTLE_TICK_SLEEP = 0.0 if DEBUG else 0.9  # o controlar con TESTING

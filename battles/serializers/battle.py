@@ -17,13 +17,13 @@ class BattleBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Battle
         fields = [
-            "id",
+            "id", "name",
             "pokemon_a", "pokemon_a_name",
             "pokemon_b", "pokemon_b_name",
             "scenario", "scenario_name",
             "scheduled_cron",
             "status", "winner", "winner_name",
-            "created_at", "updated_at",
+            "created_at", "updated_at", "run_count_total", "run_count_cron",
         ]
         read_only_fields = ["status", "winner", "created_at", "updated_at"]
 
@@ -58,14 +58,13 @@ class BattleDetailSerializer(BattleBaseSerializer,
 # ---- WRITE: creación/edición (sin campos de solo lectura) ----
 
 class BattleWriteSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True) # para respuestas
+    scheduled_cron = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Battle
         fields = [
-            "id",
             "pokemon_a", "pokemon_b", "scenario",
-            "scheduled_cron",
+            "scheduled_cron", "name",
         ]
 
     def validate(self, attrs):
