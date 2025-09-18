@@ -59,3 +59,13 @@ class BattleTests(TestCase):
         battle = Battle.objects.create(pokemon_a=self.A, pokemon_b=self.B, scenario=self.S)
         resp = self.client.post(f"/api/battles/{battle.id}/schedule/", {"cron": "*/1 * * * *"}, format="json")
         self.assertEqual(resp.status_code, 200)
+
+    def test_create_without_cron_sets_pending(self):
+        resp = self.client.post("/api/battles/", {
+            "pokemon_a": self.A.id,
+            "pokemon_b": self.B.id,
+            "scenario": self.S.id,
+        }, format="json")
+        self.assertEqual(resp.status_code, 201)
+        self.assertEqual(resp.data["status"], "PENDING")
+        
